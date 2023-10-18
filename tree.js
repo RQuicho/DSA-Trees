@@ -15,12 +15,43 @@ class Tree {
   /** sumValues(): add up all of the values in the tree. */
 
   sumValues() {
-    
+    if (!this.root) return 0;
+
+    let total = this.root.val;
+
+    const sumAllChildren = (node) => {
+      for (let child of node.children) {
+        total += child.val;
+        if (child.children.length > 0) {
+          sumAllChildren(child);
+        }
+      }
+    }
+
+    sumAllChildren(this.root);
+    return total;
   }
 
   /** countEvens(): count all of the nodes in the tree with even values. */
 
   countEvens() {
+    if (!this.root) return 0;
+
+    let count = this.root.val % 2 === 0 ? 1 : 0;
+
+    const countAllEvenChildren = (node) => {
+      for (let child of node.children) {
+        if (child.val % 2 === 0) {
+          count += 1;
+        }
+        if (child.children.length > 0) {
+          countAllEvenChildren(child);
+        }
+      }
+    }
+
+    countAllEvenChildren(this.root);
+    return count;
 
   }
 
@@ -28,6 +59,23 @@ class Tree {
    * whose value is greater than lowerBound. */
 
   numGreater(lowerBound) {
+    if (!this.root) return 0;
+
+    let count = this.root.val > lowerBound ? 1 : 0;
+
+    const countNumGreater = (node) => {
+      for (let child of node.children) {
+        if (child.val > lowerBound) {
+          count += 1;
+        }
+        if (child.children.length > 0) {
+          countNumGreater(child);
+        }
+      }
+    }
+
+    countNumGreater(this.root);
+    return count;
 
   }
 }
