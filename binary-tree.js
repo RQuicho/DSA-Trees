@@ -50,19 +50,50 @@ class BinaryTree {
       return countMaxDepth(this.root);
     }
 
-  // /** maxSum(): return the maximum sum you can obtain by traveling along a path in the tree.
-  //  * The path doesn't need to start at the root, but you can't visit a node more than once. */
+  /** maxSum(): return the maximum sum you can obtain by traveling along a path in the tree.
+   * The path doesn't need to start at the root, but you can't visit a node more than once. */
 
-  // maxSum() {
+  maxSum() {
+    // sum max values on left and right side
+    let total = 0;
+    
+    const maxSumHelper = (node) => {
+      if (!node) return 0;
+      const leftSum = maxSumHelper(node.left);
+      const rightSum = maxSumHelper(node.right);
+      total = Math.max(total, node.val + leftSum + rightSum);
+      return Math.max(0, leftSum + node.val, rightSum + node.val);
+    }
 
-  // }
+    maxSumHelper(this.root);
+    return total;
+  }
 
-  // /** nextLarger(lowerBound): return the smallest value in the tree
-  //  * which is larger than lowerBound. Return null if no such value exists. */
+  /** nextLarger(lowerBound): return the smallest value in the tree
+   * which is larger than lowerBound. Return null if no such value exists. */
 
-  // nextLarger(lowerBound) {
+  nextLarger(lowerBound) {
+    if (!this.root) return null;
 
-  // }
+    let queue = [this.root];
+    let closest = null;
+
+    while (queue.length) {
+      let currentNode = queue.shift();
+      let currentVal = currentNode.val;
+      let higherThanLowerBound = currentVal > lowerBound;
+      let shouldReassignClosest = currentVal < closest || closest === null;
+
+      if (higherThanLowerBound && shouldReassignClosest) {
+        closest = currentVal;
+      }
+
+      if (currentNode.left) queue.push(currentNode.left);
+      if (currentNode.right) queue.push(currentNode.right);
+    }
+
+    return closest;
+  }
 
   // /** Further study!
   //  * areCousins(node1, node2): determine whether two nodes are cousins
